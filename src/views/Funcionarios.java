@@ -5,6 +5,12 @@
  */
 package views;
 
+import Controllers.FuncionarioController;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author kevin
@@ -33,7 +39,7 @@ public class Funcionarios extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         lbl_senha = new javax.swing.JLabel();
-        input_senha = new javax.swing.JTextField();
+        input_senha = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -46,6 +52,11 @@ public class Funcionarios extends javax.swing.JFrame {
         });
 
         cadastro_cliente.setText("Cadastrar");
+        cadastro_cliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cadastro_clienteActionPerformed(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -96,12 +107,10 @@ public class Funcionarios extends javax.swing.JFrame {
                                     .addComponent(lbl_login)
                                     .addComponent(lbl_senha))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(input_login, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGap(1, 1, 1)
-                                        .addComponent(input_senha, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(input_login, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                    .addComponent(input_senha))))
+                        .addGap(0, 283, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -128,6 +137,27 @@ public class Funcionarios extends javax.swing.JFrame {
     private void input_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_input_loginActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_input_loginActionPerformed
+
+    private void cadastro_clienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cadastro_clienteActionPerformed
+        String login = input_login.getText();
+        String senha = input_senha.getText();
+        
+        if(login != "" && senha != ""){
+            try {
+                FuncionarioController.inserir(login, senha);
+                JOptionPane.showMessageDialog(null, "Funcionario cadastrado com sucesso.", "Loginha", JOptionPane.INFORMATION_MESSAGE);
+                input_login.setText("");
+                input_senha.setText("");
+            } catch (SQLException ex) {
+                Logger.getLogger(Funcionarios.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Ops. Não foi possivel cadastrar o funcionario tente novamente mais tarde.", "Loginha", JOptionPane.INFORMATION_MESSAGE);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Funcionarios.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Ops. Não foi possivel cadastrar o funcionario tente novamente mais tarde.", "Loginha", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
+        
+    }//GEN-LAST:event_cadastro_clienteActionPerformed
 
     private void input_senhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_input_senhaActionPerformed
         // TODO add your handling code here:
@@ -171,7 +201,7 @@ public class Funcionarios extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cadastro_cliente;
     private javax.swing.JTextField input_login;
-    private javax.swing.JTextField input_senha;
+    private javax.swing.JPasswordField input_senha;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JLabel lbl_login;

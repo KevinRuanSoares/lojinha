@@ -60,17 +60,37 @@ public class UsuarioDAOImpl extends BDGenericoDAO implements UsuarioDAO{
     }
 
     @Override
-    public void save(Usuario usuario) {
+    public void cadastraFuncionario(Usuario usuario) {
+      PreparedStatement pstmt = null;
+
+      try {
+         String sql = "Insert into usuarios(login, senha, funcionario) values(?, ?, 1)";
+         pstmt = connection.prepareStatement(sql);
+
+         pstmt.setString(1, usuario.getLogin());
+         pstmt.setString(2, usuario.getSenha());
+
+         pstmt.executeUpdate();
+      } catch (SQLException e) {
+         e.printStackTrace();
+      } finally {
+         close(pstmt);
+         close(connection);
+      }
+    }
+
+    @Override
+    public void getFuncionarioById(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void getUsuarioById(int id) {
+    public List<Usuario> listAllFuncionarios() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public List<Usuario> listAllUsuarios() {
+    public void editaFuncionario(Usuario usuario) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

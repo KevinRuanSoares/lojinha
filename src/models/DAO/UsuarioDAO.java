@@ -9,7 +9,8 @@ import models.Usuario;
  */
 public interface UsuarioDAO {
     public Usuario login(String login, String Senha);
-    public void save(Usuario usuario);
-    public void getUsuarioById(int id);
-    public List<Usuario> listAllUsuarios();
+    public void cadastraFuncionario(Usuario usuario);
+    public void editaFuncionario(Usuario usuario);
+    public void getFuncionarioById(int id);
+    public List<Usuario> listAllFuncionarios();
 }

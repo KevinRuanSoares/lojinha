@@ -9,6 +9,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import models.Usuario;
 
@@ -71,7 +72,7 @@ public class UsuarioDAOImpl extends BDGenericoDAO implements UsuarioDAO{
          pstmt.setString(2, usuario.getSenha());
 
          pstmt.executeUpdate();
-      } catch (SQLException e) {
+      } catch (Exception e) {
          e.printStackTrace();
       } finally {
          close(pstmt);
@@ -80,17 +81,78 @@ public class UsuarioDAOImpl extends BDGenericoDAO implements UsuarioDAO{
     }
 
     @Override
-    public void getFuncionarioById(int id) {
+    public void getFuncionarioByName(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public List<Usuario> listAllFuncionarios() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        List<Usuario> funcionarios = new ArrayList<>();
+        try {
+            String sql = "Select * from usuarios where funcionario = 1";
+            pstmt = connection.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Usuario funcionario = new Usuario();
+                funcionario.setId(Integer.parseInt(rs.getString("id")));
+                funcionario.setLogin(rs.getString("login"));
+                funcionario.setAdmin(Boolean.getBoolean( rs.getString("admin") ));
+                funcionario.setFuncionario(Boolean.getBoolean( rs.getString("funcionario") ));
+                funcionario.setDataCad(rs.getString("data_cad"));
+                funcionario.setDataUpdate(rs.getString("data_update"));
+                funcionarios.add(funcionario);
+            }
+
+        } catch (Exception e) {
+           e.printStackTrace();
+        } finally {
+          //fechando objetos
+           close(rs);
+           close(pstmt);
+           close(connection);
+        }
+        return funcionarios;
     }
 
     @Override
     public void editaFuncionario(Usuario usuario) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        PreparedStatement pstmt = null;
+
+        try {
+           String sql = "Update usuarios set login=?, senha=md5(?) where id = ?";
+           pstmt = connection.prepareStatement(sql);
+
+           pstmt.setString(1, usuario.getLogin());
+           pstmt.setString(2, usuario.getSenha());
+           pstmt.setString(3, String.valueOf(usuario.getId()));
+
+           pstmt.executeUpdate();
+        } catch (Exception e) {
+           e.printStackTrace();
+        } finally {
+           close(pstmt);
+           close(connection);
+        }
+    }
+
+    @Override
+    public void excluirFuncionario(Usuario usuario) {
+        PreparedStatement pstmt = null;
+
+        try {
+           String sql = "Delete from usuarios where id = ?";
+           pstmt = connection.prepareStatement(sql);
+           pstmt.setString(1, String.valueOf(usuario.getId()));
+
+           pstmt.executeUpdate();
+        } catch (Exception e) {
+           e.printStackTrace();
+        } finally {
+           close(pstmt);
+           close(connection);
+        }
     }
 }

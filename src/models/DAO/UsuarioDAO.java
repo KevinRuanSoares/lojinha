@@ -11,6 +11,7 @@ public interface UsuarioDAO {
     public Usuario login(String login, String Senha);
     public void cadastraFuncionario(Usuario usuario);
     public void editaFuncionario(Usuario usuario);
-    public void getFuncionarioById(int id);
+    public void excluirFuncionario(Usuario usuario);
+    public void getFuncionarioByName(int id);
     public List<Usuario> listAllFuncionarios();
 }
